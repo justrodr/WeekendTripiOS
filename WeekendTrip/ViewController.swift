@@ -85,6 +85,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func searchButtonPressed(_ sender: Any) {
+        originInputField.resignFirstResponder()
         let textFieldInput = self.originInputField.text
         self.originInputField.text = textFieldInput
         if stringIsAnAirportCode(input: textFieldInput ?? "") {
