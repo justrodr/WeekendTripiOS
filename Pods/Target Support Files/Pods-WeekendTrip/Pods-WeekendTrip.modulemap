@@ -1,0 +1,6 @@
+framework module Pods_WeekendTrip {
+  umbrella header "Pods-WeekendTrip-umbrella.h"
+
+  export *
+  module * { export * }
+}
