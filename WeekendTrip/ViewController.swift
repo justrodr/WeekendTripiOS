@@ -15,16 +15,44 @@ class ViewController: UIViewController {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var originInputField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var destinationLabel: UILabel!
+    @IBOutlet weak var originLabel: UILabel!
+    @IBOutlet weak var outboundFlightButton: UIButton!
+    @IBOutlet weak var inboundFlightButton: UIButton!
+    @IBOutlet weak var toSymbolLabel: UILabel!
+    @IBOutlet weak var errorMessageLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        toSymbolLabel.text = "\u{21C6}"
+        searchButton.setTitle("\u{2192}", for: .normal)
+        priceLabel.text = "Enter Origin"
+        outboundFlightButton.layer.borderWidth = 0.5
+        outboundFlightButton.layer.cornerRadius = 8
+        outboundFlightButton.setTitle("\u{2708} \u{2192}", for: .normal)
+        inboundFlightButton.layer.borderWidth = 0.5
+        inboundFlightButton.layer.cornerRadius = 8
+        inboundFlightButton.setTitle("\u{2190} \u{2708}", for: .normal)
+        toSymbolLabel.isHidden = true
+        originLabel.isHidden = true
+        destinationLabel.isHidden = true
+        outboundFlightButton.isHidden = true
+        inboundFlightButton.isHidden = true
+        errorMessageLabel.isHidden = true
         configureTapGesture()
         originInputField.delegate = self
         getNearestWeekendDates()
     }
     
     func setResultTripLabel(trip: Trip) {
-        self.priceLabel.text = "Go to " + trip.destination + " for $" + String(trip.cost) + "!"
+        self.priceLabel.text = "$" + String(trip.cost)
+        self.destinationLabel.text = trip.destination
+        self.originLabel.text = trip.origin
+        toSymbolLabel.isHidden = false
+        originLabel.isHidden = false
+        destinationLabel.isHidden = false
+//        outboundFlightButton.isHidden = false
+//        inboundFlightButton.isHidden = false
     }
     
     func findCheapestRoundTrip(origin: String) -> Trip {
@@ -65,7 +93,11 @@ class ViewController: UIViewController {
                 quotes.append(quote.MinPrice)
             }
             quotes.sort()
-            cheapestPrice = quotes[0]
+            if quotes.count <= 0 {
+                cheapestPrice = 10000
+            } else {
+                cheapestPrice = quotes[0]
+            }
             
         } catch {
             print("failed to find flights from " + origin + " to " + destination)
@@ -85,6 +117,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func searchButtonPressed(_ sender: Any) {
+        errorMessageLabel.isHidden = true
         originInputField.resignFirstResponder()
         let textFieldInput = self.originInputField.text
         self.originInputField.text = textFieldInput
@@ -92,7 +125,12 @@ class ViewController: UIViewController {
             let trip = findCheapestRoundTrip(origin: textFieldInput ?? "")
             setResultTripLabel(trip: trip)
         } else {
-            self.priceLabel.text = "Couldn't find that airport..."
+            if textFieldInput?.count ?? 0 <= 3 {
+                errorMessageLabel.text = "Sorry, this airport is not supported"
+            } else {
+                errorMessageLabel.text = "Please enter a 3-letter airport code"
+            }
+            errorMessageLabel.isHidden = false
         }
         
     }
