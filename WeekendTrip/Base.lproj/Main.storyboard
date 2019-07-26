@@ -20,81 +20,75 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08u-jp-Zbo">
                                 <rect key="frame" x="194" y="244" width="26" height="33"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="24"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="24"/>
+                                <color key="textColor" red="0.28407087922096252" green="0.54188287258148193" blue="0.48234820365905762" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="???" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alE-jj-8Bm">
-                                <rect key="frame" x="260" y="235.5" width="51" height="50"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="36"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JFK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alE-jj-8Bm">
+                                <rect key="frame" x="260" y="235.5" width="65.5" height="50"/>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="36"/>
+                                <color key="textColor" red="0.66404438018798828" green="0.84298783540725708" blue="0.84706240892410278" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wiK-qf-ZdN">
-                                <rect key="frame" x="100" y="235.5" width="54" height="50"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="36"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DFW" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wiK-qf-ZdN">
+                                <rect key="frame" x="69" y="235.5" width="85" height="50"/>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="36"/>
+                                <color key="textColor" red="0.66404438018798828" green="0.84298783540725708" blue="0.84706240892410278" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$___" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVZ-ay-K8w">
-                                <rect key="frame" x="166.5" y="317" width="81" height="55"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="40"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$90" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVZ-ay-K8w">
+                                <rect key="frame" x="171.5" y="317" width="71.5" height="55"/>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="40"/>
+                                <color key="textColor" red="0.91545242071151733" green="0.75341272354125977" blue="0.28613400459289551" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jvC-f8-yWT">
-                                <rect key="frame" x="50" y="423" width="254" height="50"/>
+                                <rect key="frame" x="50" y="423" width="252" height="50"/>
+                                <color key="backgroundColor" red="0.26717805862426758" green="0.24535289406776428" blue="0.34118705987930298" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="DJO-IQ-ez2"/>
                                 </constraints>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="24"/>
+                                <color key="textColor" red="0.66404438018798828" green="0.84298783540725708" blue="0.84706240892410278" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="24"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fpd-hE-3Uv">
-                                <rect key="frame" x="334" y="425.5" width="30" height="45"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="24"/>
+                                <rect key="frame" x="332" y="409" width="32" height="78"/>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="48"/>
                                 <state key="normal" title="&gt;">
-                                    <color key="titleColor" red="0.3826470971" green="0.58329576250000004" blue="0.64314746860000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="titleColor" red="0.28407087922096252" green="0.54188287258148193" blue="0.48234820365905762" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
                                     <action selector="searchButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VOR-WE-22l"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gl7-74-JFG">
-                                <rect key="frame" x="50" y="673" width="100" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="ST3-3s-x0W"/>
-                                    <constraint firstAttribute="height" constant="50" id="gVN-OE-dbe"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="24"/>
-                                <state key="normal">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ca0-Xo-sxH">
-                                <rect key="frame" x="50" y="733" width="100" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="7HZ-CY-E5q"/>
-                                    <constraint firstAttribute="width" constant="100" id="tBb-uu-45l"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="24"/>
-                                <state key="normal">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please input 3-letter airport code" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="REx-qr-VVu">
-                                <rect key="frame" x="50" y="481" width="205" height="20"/>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="14"/>
-                                <color key="textColor" red="0.87633943560000005" green="0.36223620179999999" blue="0.29016354680000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <rect key="frame" x="50" y="481" width="210.5" height="20"/>
+                                <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
+                                <color key="textColor" red="0.680774986743927" green="0.31078100204467773" blue="0.26272499561309814" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bGf-wy-nMb">
+                                <rect key="frame" x="107" y="571" width="200" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Llv-4p-UY8"/>
+                                    <constraint firstAttribute="height" constant="80" id="UcK-x3-2rH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="28"/>
+                                <state key="normal" title="Book Now">
+                                    <color key="titleColor" red="0.66407614946365356" green="0.84292936325073242" blue="0.85098451375961304" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="bookNowButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JhN-Lt-NXF"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.26717805862426758" green="0.24535289406776428" blue="0.34118705987930298" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Fpd-hE-3Uv" secondAttribute="trailing" constant="50" id="41h-p9-JcC"/>
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="200" id="4SG-m4-9RY"/>
                             <constraint firstItem="alE-jj-8Bm" firstAttribute="leading" secondItem="08u-jp-Zbo" secondAttribute="trailing" constant="40" id="BWT-Nz-ceW"/>
+                            <constraint firstItem="bGf-wy-nMb" firstAttribute="top" secondItem="REx-qr-VVu" secondAttribute="bottom" constant="70" id="CaB-oN-Gfh"/>
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EgC-SI-Vlt"/>
                             <constraint firstItem="jvC-f8-yWT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="LSQ-t7-7wb"/>
                             <constraint firstItem="Fpd-hE-3Uv" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="NVp-eI-mCr"/>
@@ -103,24 +97,20 @@
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="leading" secondItem="wiK-qf-ZdN" secondAttribute="trailing" constant="40" id="f7c-1n-xMe"/>
                             <constraint firstItem="mVZ-ay-K8w" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gl0-W1-ybR"/>
                             <constraint firstItem="Fpd-hE-3Uv" firstAttribute="leading" secondItem="jvC-f8-yWT" secondAttribute="trailing" constant="30" id="h1D-cc-CX3"/>
-                            <constraint firstItem="ca0-Xo-sxH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="jv1-hr-sfA"/>
                             <constraint firstItem="REx-qr-VVu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="kND-Hp-O7W"/>
-                            <constraint firstItem="gl7-74-JFG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="nqB-o2-zS1"/>
                             <constraint firstItem="jvC-f8-yWT" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ot8-7c-txq"/>
-                            <constraint firstItem="ca0-Xo-sxH" firstAttribute="top" secondItem="gl7-74-JFG" secondAttribute="bottom" constant="10" id="uLy-Gr-49A"/>
-                            <constraint firstItem="gl7-74-JFG" firstAttribute="top" secondItem="jvC-f8-yWT" secondAttribute="bottom" constant="200" id="uRp-aM-o7W"/>
+                            <constraint firstItem="bGf-wy-nMb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="rnk-jz-Q9K"/>
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="centerY" secondItem="wiK-qf-ZdN" secondAttribute="centerY" id="wPE-IZ-HIo"/>
                             <constraint firstItem="alE-jj-8Bm" firstAttribute="centerY" secondItem="08u-jp-Zbo" secondAttribute="centerY" id="zeb-nu-tjD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="bookNowButton" destination="bGf-wy-nMb" id="iq1-hv-zCz"/>
                         <outlet property="destinationLabel" destination="alE-jj-8Bm" id="3sd-VY-LyV"/>
                         <outlet property="errorMessageLabel" destination="REx-qr-VVu" id="1c3-aj-Uyt"/>
-                        <outlet property="inboundFlightButton" destination="ca0-Xo-sxH" id="Gmx-ew-tM4"/>
                         <outlet property="originInputField" destination="jvC-f8-yWT" id="A0r-Uk-cNb"/>
                         <outlet property="originLabel" destination="wiK-qf-ZdN" id="s8T-Lt-81h"/>
-                        <outlet property="outboundFlightButton" destination="gl7-74-JFG" id="Toy-pg-56k"/>
                         <outlet property="priceLabel" destination="mVZ-ay-K8w" id="31w-Hq-0CL"/>
                         <outlet property="searchButton" destination="Fpd-hE-3Uv" id="yBg-cd-Sug"/>
                         <outlet property="toSymbolLabel" destination="08u-jp-Zbo" id="Rrw-kB-UCU"/>

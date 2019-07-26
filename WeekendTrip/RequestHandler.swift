@@ -44,6 +44,86 @@ func searchRouteData(origin: String, destination: String, date: String) throws -
     return routeSearchData
 }
 
+func createSession(origin: String, destination: String, inboundDate: String, outboundDate: String) -> String {
+    
+    print("creating session for " + origin + ", " + destination)
+    var responseLink: String = ""
+    let semaphore = DispatchSemaphore(value: 0)
+    let url = URL(string: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0")!
+    var request = URLRequest(url: url)
+    request.setValue("skyscanner-skyscanner-flight-search-v1.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+    request.setValue("355a5d425dmsh69871ab7a8b6922p19ec12jsnec5b7a0ac703", forHTTPHeaderField: "X-RapidAPI-Key")
+    request.httpMethod = "POST"
+    let parameters: [String: Any] = [
+        "inboundDate": inboundDate,
+        "cabinClass": "economy",
+        "children": 0,
+        "infants": 0,
+        "country": "US",
+        "currency": "USD",
+        "locale": "en-US",
+        "originPlace": origin + "-sky",
+        "destinationPlace": destination + "-sky",
+        "outboundDate": outboundDate,
+        "adults": 1
+    ]
+    request.httpBody = parameters.percentEscaped().data(using: .utf8)
+    
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        
+        guard let data = data else { return }
+        guard let formattedResponse = response as? HTTPURLResponse else { return }
+//        print(formattedResponse)
+        if let keyGiven = formattedResponse.allHeaderFields[AnyHashable("Location")] {
+            responseLink =  keyGiven as! String
+        } else {
+            responseLink = ""
+        }
+        semaphore.signal()
+    }
+    task.resume()
+    let dispatchTime: DispatchTime
+    semaphore.wait(timeout: DispatchTime.now() + 5)
+    
+    if responseLink == "" {
+        print("response did not come")
+        return ""
+    }
+    print("session key obtain successful")
+    return responseLink.sessionKey
+}
+
+func pollSessionResults(sessionKey: String) -> SessionResults {
+    
+    print("polling session for " + sessionKey)
+    let url = URL(string: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/" + sessionKey + "?pageIndex=0&pageSize=10")!
+    var request = URLRequest(url: url)
+    request.setValue("skyscanner-skyscanner-flight-search-v1.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+    request.setValue("355a5d425dmsh69871ab7a8b6922p19ec12jsnec5b7a0ac703", forHTTPHeaderField: "X-RapidAPI-Key")
+    
+    var sessionResults: SessionResults?
+    let semaphore = DispatchSemaphore(value: 0)
+    
+    URLSession.shared.dataTask(with: request) { (data, response, err) in
+        
+        guard let data = data else { return }
+        
+        do {
+            let r = try JSONDecoder().decode(SessionResults.self, from: data)
+            sessionResults = r
+            semaphore.signal()
+        }
+        catch let jsonErr {
+            print("error:", jsonErr)
+        }
+        
+    }.resume()
+    semaphore.wait(wallTimeout: .distantFuture)
+    print("finished polling")
+    return sessionResults!
+}
+
+
 func getNearestWeekendDates() -> [String] {
     let today = Date()
     let calendar = Calendar.current
@@ -102,4 +182,37 @@ func getNearestWeekendDates() -> [String] {
     
     return nextWeekendDates
     
+}
+
+extension Dictionary {
+    func percentEscaped() -> String {
+        return map { (key, value) in
+            let escapedKey = "\(key)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            let escapedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            return escapedKey + "=" + escapedValue
+            }
+            .joined(separator: "&")
+    }
+}
+
+extension CharacterSet {
+    static let urlQueryValueAllowed: CharacterSet = {
+        let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
+        let subDelimitersToEncode = "!$&'()*+,;="
+        
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "\(generalDelimitersToEncode)\(subDelimitersToEncode)")
+        return allowed
+    }()
+}
+
+extension String {
+    var sessionKey: String {
+        if self.components(separatedBy: "/").count >= 7 {
+            return self.components(separatedBy: "/")[7]
+        } else {
+            print("error finding session key")
+            return ""
+        }
+    }
 }
