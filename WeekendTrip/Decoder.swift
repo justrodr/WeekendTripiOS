@@ -108,6 +108,6 @@ struct BookingDetails: Decodable {
 
 struct Place: Decodable {
     let Id: Int
-    let Code: String
+    let Code: String?
     let Name: String
 }

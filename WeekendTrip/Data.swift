@@ -44,4 +44,6 @@ struct ResultWithOriginAndDestination {
 
 //let possibleDestinations: [String] = ["ATL", "ABQ", "AUS"] //Short list
 
-let possibleDestination: [String] = ["IAH", "HOU", "AUS", "DFW", "SAT", "CLL", "MCO", "MIA", "LGA", "JFK", "EWR", "SEA", "LAX", "DEN", "ORD", "PHL", "MSY", "ATL", "DCA", "IAD", "SAN", "FLL", "TPA", "DTW", "CLT", "SFO", "SJC", "OAK"]
+//let possibleDestinations: [String] = ["IAH", "HOU", "AUS", "DFW", "SAT", "CLL", "MCO", "MIA", "LGA", "JFK", "EWR", "SEA", "LAX", "DEN", "ORD", "PHL", "MSY", "ATL", "DCA", "IAD", "SAN", "FLL", "TPA", "DTW", "CLT", "SFO", "SJC", "OAK"] //For Texans
+
+let possibleDestinations: [String] = ["SJC", "OAK", "SFO", "LAX", "SEA", "PDX", "LAS"] //West coast

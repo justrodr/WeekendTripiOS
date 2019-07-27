@@ -54,8 +54,13 @@ class ViewController: UIViewController {
             let sessionResults = self.getRoundTripsToAllDestinations(origin: origin)
             DispatchQueue.main.async {
                 let sortedTrips = self.getCheapestTrips(sessionResults: sessionResults)
-                print(sortedTrips[0].destination)
-                self.setResultScreen(trip: sortedTrips[0])
+                if sortedTrips.count <= 0 {
+                    self.priceLabel.text = "Something Went Wront..."
+                    self.searchButton.isEnabled = true
+                } else {
+                    print(sortedTrips[0].destination)
+                    self.setResultScreen(trip: sortedTrips[0])
+                }
             }
         }
     }
@@ -87,12 +92,14 @@ class ViewController: UIViewController {
     
     
     
-    func getRoundTripsToAllDestinations(origin: String) -> [ResultWithOriginAndDestination] {
+    func getRoundTripsToAllDestinations(origin: String) -> [ResultWithOriginAndDestination] { //I want two dispatch groups to speed up this process
         let nextWeekendDates = getNearestWeekendDates()
         var sessions = [String]()
         var results = [ResultWithOriginAndDestination]()
         for destination in possibleDestinations {
-            sessions.append(createSession(origin: origin, destination: destination, inboundDate: nextWeekendDates[1], outboundDate: nextWeekendDates[0]))
+            if originAndDestinationisValid(origin: origin, destination: destination) {
+                sessions.append(createSession(origin: origin, destination: destination, inboundDate: nextWeekendDates[1], outboundDate: nextWeekendDates[0]))
+            }
         }
         for key in sessions {
             if key != ""{
@@ -104,15 +111,28 @@ class ViewController: UIViewController {
         return results
     }
     
+    func originAndDestinationisValid(origin: String, destination: String) -> Bool {
+        if origin == "HOU" || origin == "AUS" || origin == "DFW" || origin == "SAT" || origin == "CLL" {
+            if destination == "HOU" || destination == "AUS" || destination == "DFW" || destination == "SAT" || destination == "CLL" {
+                return false
+            }
+        }
+        if origin == "SFO" || origin == "OAK" || origin == "SJC" {
+            if destination == "SFO" || destination == "OAK" || destination == "SJC" {
+                return false
+            }
+        }
+        return true
+    }
+    
     func nameOfDestination(sessionResult: SessionResults) -> String {
         print("Finding place code")
         let destinationID = Int(sessionResult.Query.DestinationPlace)
         let places = sessionResult.Places
         print("target: " + sessionResult.Query.DestinationPlace)
         for place in places {
-            print(place.Id)
             if place.Id == destinationID {
-                return place.Code
+                return place.Code ?? "???"
             }
         }
         print("couldn't find place code")
@@ -129,37 +149,6 @@ class ViewController: UIViewController {
         destinationLabel.isHidden = false
         bookNowButton.isHidden = false
         bookNowLink = trip.link
-    }
-    
-    func getRoundTrip(origin: String, destination: String, dates: [String]) -> OneWayTrip {
-        let outboundLeg = getOneWayTrip(origin: origin, destination: destination, date: dates[0])
-        let inboundLeg = getOneWayTrip(origin: destination, destination: origin, date: dates[1])
-        let roundTrip = OneWayTrip.init(origin: origin, destination: destination, cost: outboundLeg.cost + inboundLeg.cost)
-        return roundTrip
-    }
-    
-    func getOneWayTrip(origin: String, destination: String, date: String) -> OneWayTrip {
-        
-        var cheapestPrice: Int = -1
-        do {
-            var quotes: [Quote] = []
-            let routeData = try searchRouteData(origin: origin, destination: destination, date: date)
-            for quote in routeData?.Quotes ?? [] {
-                quotes.append(quote)
-            }
-            quotes.sort(by: { $0.MinPrice < $1.MinPrice })
-            if quotes.count <= 0 {
-                cheapestPrice = 10000
-            } else {
-                cheapestPrice = quotes[0].MinPrice
-            }
-            
-        } catch {
-            print("failed to find flights from " + origin + " to " + destination)
-        }
-        
-        let trip = OneWayTrip.init(origin: origin, destination: destination, cost: cheapestPrice)
-        return trip
     }
 
     private func configureTapGesture() {
@@ -187,6 +176,7 @@ class ViewController: UIViewController {
             } else {
                 errorMessageLabel.text = "Please enter a 3-letter airport code"
             }
+            searchButton.isEnabled = true
             errorMessageLabel.isHidden = false
         }
         

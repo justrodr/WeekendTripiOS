@@ -8,6 +8,8 @@
 
 import Foundation
 
+var timeToTimeout: Double = 3
+
 func searchRouteData(origin: String, destination: String, date: String) throws -> RouteSearchData? {
     
     print("loading web services")
@@ -35,7 +37,7 @@ func searchRouteData(origin: String, destination: String, date: String) throws -
             semaphore.signal()
         }
         catch let jsonErr {
-            print("error:", jsonErr)
+            print("bummer error:", jsonErr)
             semaphore.signal()
         }
         
@@ -83,7 +85,7 @@ func createSession(origin: String, destination: String, inboundDate: String, out
     }
     task.resume()
     let dispatchTime: DispatchTime
-    semaphore.wait(timeout: DispatchTime.now() + 5)
+    semaphore.wait(timeout: DispatchTime.now() + timeToTimeout)
     
     if responseLink == "" {
         print("response did not come")
@@ -106,6 +108,8 @@ func pollSessionResults(sessionKey: String) -> SessionResults {
     
     URLSession.shared.dataTask(with: request) { (data, response, err) in
         
+        guard let formattedResponse = response as? HTTPURLResponse else { return }
+        print(formattedResponse)
         guard let data = data else { return }
         
         do {
@@ -114,7 +118,8 @@ func pollSessionResults(sessionKey: String) -> SessionResults {
             semaphore.signal()
         }
         catch let jsonErr {
-            print("error:", jsonErr)
+            print("bummer error:", jsonErr)
+            semaphore.signal()
         }
         
     }.resume()
@@ -151,7 +156,7 @@ func getNearestWeekendDates() -> [String] {
         print("it's thursday")
         break
     case 6:
-        daysUntilNextFriday = 0
+        daysUntilNextFriday = 7
         print("it's friday")
         break
     case 7:
