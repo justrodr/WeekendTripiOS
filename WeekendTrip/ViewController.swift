@@ -24,6 +24,11 @@ class ViewController: UIViewController {
     
     var resultRoundTrip: OneWayTrip?
     var bookNowLink: String?
+    var responseLinks: [String] = []
+    var sessionResultsArray: [ResultWithOriginAndDestination] = []
+    let dispatchGroupCreateSession = DispatchGroup()
+    let dispatchGroupPollSession = DispatchGroup()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,19 +55,25 @@ class ViewController: UIViewController {
     
     func startSearch(origin: String) {
         print("Starting search")
-        DispatchQueue.global(qos: .background).async {
-            let sessionResults = self.getRoundTripsToAllDestinations(origin: origin)
-            DispatchQueue.main.async {
-                let sortedTrips = self.getCheapestTrips(sessionResults: sessionResults)
-                if sortedTrips.count <= 0 {
-                    self.priceLabel.text = "Something Went Wront..."
-                    self.searchButton.isEnabled = true
-                } else {
-                    print(sortedTrips[0].destination)
-                    self.setResultScreen(trip: sortedTrips[0])
-                }
-            }
+        let weekendDates = getNearestWeekendDates()
+        requestForAllDestinations(origin: origin, outboundDate: weekendDates[0], inboundDate: weekendDates[1])
+    }
+    
+    func sortThroughResults() {
+        let sortedTrips = self.getCheapestTrips(sessionResults: sessionResultsArray)
+        if sortedTrips.count <= 0 {
+            handleError()
+        } else {
+            print(sortedTrips[0].destination)
+            self.setResultScreen(trip: sortedTrips[0])
         }
+    }
+    
+    func handleError() {
+        self.priceLabel.text = "😭👩‍💻⏸"
+        self.errorMessageLabel.text = "Oops something went wrong. Check your internet connection and try again."
+        self.errorMessageLabel.isHidden = false
+        self.searchButton.isEnabled = true
     }
     
     func getCheapestTrips(sessionResults: [ResultWithOriginAndDestination]) -> [RoundTrip] {
@@ -80,7 +91,7 @@ class ViewController: UIViewController {
             for pricingOption in itinerary.PricingOptions{
                 let newRoundTrip = RoundTrip.init(origin: destination.origin, destination: destination.Destination, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
                 roundTrips.append(newRoundTrip)
-                print(roundTrips)
+//                print(roundTrips)
             }
         }
         roundTrips.sort(by: {$0.cost < $1.cost})
@@ -92,24 +103,24 @@ class ViewController: UIViewController {
     
     
     
-    func getRoundTripsToAllDestinations(origin: String) -> [ResultWithOriginAndDestination] { //I want two dispatch groups to speed up this process
-        let nextWeekendDates = getNearestWeekendDates()
-        var sessions = [String]()
-        var results = [ResultWithOriginAndDestination]()
-        for destination in possibleDestinations {
-            if originAndDestinationisValid(origin: origin, destination: destination) {
-                sessions.append(createSession(origin: origin, destination: destination, inboundDate: nextWeekendDates[1], outboundDate: nextWeekendDates[0]))
-            }
-        }
-        for key in sessions {
-            if key != ""{
-                let sessionResult = pollSessionResults(sessionKey: key)
-                let destination = nameOfDestination(sessionResult: sessionResult)
-                results.append(ResultWithOriginAndDestination(sessionResults: sessionResult, origin: origin, Destination: destination))
-            }
-        }
-        return results
-    }
+//    func getRoundTripsToAllDestinations(origin: String) -> [ResultWithOriginAndDestination] { //I want two dispatch groups to speed up this process
+//        let nextWeekendDates = getNearestWeekendDates()
+//        var sessions = [String]()
+//        var results = [ResultWithOriginAndDestination]()
+//        for destination in possibleDestinations {
+//            if originAndDestinationisValid(origin: origin, destination: destination) {
+//                sessions.append(createSession(origin: origin, destination: destination, inboundDate: nextWeekendDates[1], outboundDate: nextWeekendDates[0]))
+//            }
+//        }
+//        for key in sessions {
+//            if key != ""{
+//                let sessionResult = pollSessionResults(sessionKey: key)
+//                let destination = nameOfDestination(sessionResult: sessionResult)
+//                results.append(ResultWithOriginAndDestination(sessionResults: sessionResult, origin: origin, Destination: destination))
+//            }
+//        }
+//        return results
+//    }
     
     func originAndDestinationisValid(origin: String, destination: String) -> Bool {
         if origin == "HOU" || origin == "AUS" || origin == "DFW" || origin == "SAT" || origin == "CLL" {
@@ -123,20 +134,6 @@ class ViewController: UIViewController {
             }
         }
         return true
-    }
-    
-    func nameOfDestination(sessionResult: SessionResults) -> String {
-        print("Finding place code")
-        let destinationID = Int(sessionResult.Query.DestinationPlace)
-        let places = sessionResult.Places
-        print("target: " + sessionResult.Query.DestinationPlace)
-        for place in places {
-            if place.Id == destinationID {
-                return place.Code ?? "???"
-            }
-        }
-        print("couldn't find place code")
-        return ""
     }
     
     func setResultScreen(trip: RoundTrip) {
@@ -165,6 +162,7 @@ class ViewController: UIViewController {
         errorMessageLabel.isHidden = true
         originInputField.resignFirstResponder()
         let textFieldInput = self.originInputField.text
+        print("Searching for: " + textFieldInput!)
         self.originInputField.text = textFieldInput
         if stringIsAnAirportCode(input: textFieldInput ?? "") {
             self.originLabel.text = textFieldInput

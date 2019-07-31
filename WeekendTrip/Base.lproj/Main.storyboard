@@ -36,8 +36,8 @@
                                 <color key="textColor" red="0.66404438018798828" green="0.84298783540725708" blue="0.84706240892410278" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$90" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVZ-ay-K8w">
-                                <rect key="frame" x="171.5" y="317" width="71.5" height="55"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$90" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVZ-ay-K8w">
+                                <rect key="frame" x="16" y="317" width="382" height="55"/>
                                 <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="40"/>
                                 <color key="textColor" red="0.91545242071151733" green="0.75341272354125977" blue="0.28613400459289551" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
@@ -62,14 +62,17 @@
                                     <action selector="searchButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VOR-WE-22l"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please input 3-letter airport code" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="REx-qr-VVu">
-                                <rect key="frame" x="50" y="481" width="210.5" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please input 3-letter airport code" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="REx-qr-VVu">
+                                <rect key="frame" x="50" y="481" width="314" height="19.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="314" id="i8C-5m-Mf6"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
                                 <color key="textColor" red="0.680774986743927" green="0.31078100204467773" blue="0.26272499561309814" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bGf-wy-nMb">
-                                <rect key="frame" x="107" y="571" width="200" height="80"/>
+                                <rect key="frame" x="107" y="570.5" width="200" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="Llv-4p-UY8"/>
                                     <constraint firstAttribute="height" constant="80" id="UcK-x3-2rH"/>
@@ -85,6 +88,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.26717805862426758" green="0.24535289406776428" blue="0.34118705987930298" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="mVZ-ay-K8w" secondAttribute="trailing" constant="16" id="3Em-bC-7Mb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Fpd-hE-3Uv" secondAttribute="trailing" constant="50" id="41h-p9-JcC"/>
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="200" id="4SG-m4-9RY"/>
                             <constraint firstItem="alE-jj-8Bm" firstAttribute="leading" secondItem="08u-jp-Zbo" secondAttribute="trailing" constant="40" id="BWT-Nz-ceW"/>
@@ -92,6 +96,7 @@
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EgC-SI-Vlt"/>
                             <constraint firstItem="jvC-f8-yWT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="LSQ-t7-7wb"/>
                             <constraint firstItem="Fpd-hE-3Uv" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="NVp-eI-mCr"/>
+                            <constraint firstItem="mVZ-ay-K8w" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="QZ8-P6-9EN"/>
                             <constraint firstItem="mVZ-ay-K8w" firstAttribute="top" secondItem="08u-jp-Zbo" secondAttribute="bottom" constant="40" id="RkG-OW-1kx"/>
                             <constraint firstItem="REx-qr-VVu" firstAttribute="top" secondItem="jvC-f8-yWT" secondAttribute="bottom" constant="8" id="dJi-yx-tUy"/>
                             <constraint firstItem="08u-jp-Zbo" firstAttribute="leading" secondItem="wiK-qf-ZdN" secondAttribute="trailing" constant="40" id="f7c-1n-xMe"/>
@@ -118,6 +123,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="65.625"/>
         </scene>
     </scenes>
 </document>
