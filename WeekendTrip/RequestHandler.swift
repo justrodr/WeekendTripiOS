@@ -89,8 +89,6 @@ extension ViewController {
             
             URLSession.shared.dataTask(with: request) { (data, response, err) in
                 
-                guard let formattedResponse = response as? HTTPURLResponse else { return }
-                print(formattedResponse)
                 guard let data = data else { return }
                 
                 do {
