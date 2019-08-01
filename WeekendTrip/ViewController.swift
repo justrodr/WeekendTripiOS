@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 import SafariServices
 
 
@@ -91,7 +90,6 @@ class ViewController: UIViewController {
             for pricingOption in itinerary.PricingOptions{
                 let newRoundTrip = RoundTrip.init(origin: destination.origin, destination: destination.Destination, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
                 roundTrips.append(newRoundTrip)
-//                print(roundTrips)
             }
         }
         roundTrips.sort(by: {$0.cost < $1.cost})
@@ -100,27 +98,6 @@ class ViewController: UIViewController {
         }
         return roundTrips[0]
     }
-    
-    
-    
-//    func getRoundTripsToAllDestinations(origin: String) -> [ResultWithOriginAndDestination] { //I want two dispatch groups to speed up this process
-//        let nextWeekendDates = getNearestWeekendDates()
-//        var sessions = [String]()
-//        var results = [ResultWithOriginAndDestination]()
-//        for destination in possibleDestinations {
-//            if originAndDestinationisValid(origin: origin, destination: destination) {
-//                sessions.append(createSession(origin: origin, destination: destination, inboundDate: nextWeekendDates[1], outboundDate: nextWeekendDates[0]))
-//            }
-//        }
-//        for key in sessions {
-//            if key != ""{
-//                let sessionResult = pollSessionResults(sessionKey: key)
-//                let destination = nameOfDestination(sessionResult: sessionResult)
-//                results.append(ResultWithOriginAndDestination(sessionResults: sessionResult, origin: origin, Destination: destination))
-//            }
-//        }
-//        return results
-//    }
     
     func originAndDestinationisValid(origin: String, destination: String) -> Bool {
         if origin == "HOU" || origin == "AUS" || origin == "DFW" || origin == "SAT" || origin == "CLL" {
@@ -162,12 +139,13 @@ class ViewController: UIViewController {
         errorMessageLabel.isHidden = true
         originInputField.resignFirstResponder()
         let textFieldInput = self.originInputField.text
-        print("Searching for: " + textFieldInput!)
-        self.originInputField.text = textFieldInput
-        if stringIsAnAirportCode(input: textFieldInput ?? "") {
-            self.originLabel.text = textFieldInput
+        let code = textFieldInput?.uppercased()
+        print("Searching for: " + code!)
+        self.originInputField.text = code
+        if stringIsAnAirportCode(input: code ?? "") {
+            self.originLabel.text = code
             self.priceLabel.text = "Searching..."
-            startSearch(origin: textFieldInput ?? "")
+            startSearch(origin: code ?? "")
         } else {
             if textFieldInput?.count ?? 0 <= 3 {
                 errorMessageLabel.text = "Sorry, this airport is not supported"
