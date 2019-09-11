@@ -115,6 +115,7 @@ extension ViewController {
         print("target: " + sessionResult.Query.DestinationPlace)
         for place in places {
             if place.Id == destinationID {
+                print(place.Name + "coolcoolcoolcool") //Where to get the full name of the city
                 return place.Code ?? "???"
             }
         }

@@ -7,8 +7,6 @@ target 'WeekendTrip' do
 
   # Pods for WeekendTrip
 
-    pod 'Alamofire', '~> 4.0.0'
-
     target 'WeekendTripTests' do
         inherit! :search_paths
         # Pods for testing

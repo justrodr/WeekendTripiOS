@@ -20,6 +20,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var toSymbolLabel: UILabel!
     @IBOutlet weak var errorMessageLabel: UILabel!
     @IBOutlet weak var bookNowButton: UIButton!
+    @IBOutlet weak var destinationFullName: UILabel!
+    @IBOutlet weak var originFullName: UILabel!
+    @IBOutlet weak var tripDateLabel: UILabel!
     
     var resultRoundTrip: OneWayTrip?
     var bookNowLink: String?
@@ -50,6 +53,7 @@ class ViewController: UIViewController {
         configureTapGesture()
         originInputField.delegate = self
         bookNowButton.isHidden = true
+        
     }
     
     func startSearch(origin: String) {
@@ -86,6 +90,7 @@ class ViewController: UIViewController {
     
     func getCheapestTrip(destination: ResultWithOriginAndDestination) -> RoundTrip {
         var roundTrips = [RoundTrip]()
+        print("**********" + destination.origin)
         for itinerary in destination.sessionResults.Itineraries {
             for pricingOption in itinerary.PricingOptions{
                 let newRoundTrip = RoundTrip.init(origin: destination.origin, destination: destination.Destination, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
