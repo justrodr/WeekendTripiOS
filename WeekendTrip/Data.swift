@@ -39,14 +39,18 @@ class OneWayTrip {
 //}
 
 class RoundTrip {
-    var origin: String
-    var destination: String
+    var originCode: String
+    var destinationCode: String
+    var originName: String
+    var destinationName: String
     var cost: Float
     var link: String
     
-    init(origin: String, destination: String, cost: Float, link: String) {
-        self.origin = origin
-        self.destination = destination
+    init(originCode: String, destinationCode: String, originName: String, destinationName: String, cost: Float, link: String) {
+        self.originCode = originCode
+        self.destinationCode = destinationCode
+        self.destinationName = destinationName
+        self.originName = originName
         self.cost = cost
         self.link = link
     }
@@ -54,8 +58,10 @@ class RoundTrip {
 
 struct ResultWithOriginAndDestination {
     let sessionResults: SessionResults
-    let origin: String
-    let Destination: String
+    let originCode: String
+    let destinationCode: String
+    let originName: String
+    let destinationName: String
 }
 
 //let possibleDestinations: [String] = ["IAH", "JFK", "SFO", "ATL", "ABQ", "AUS", "CLT", "ORD", "CVG", "DFW", "DEN", "EWR", "LAX", "LGA", "MDW", "SEA", "MCO", "PHX", "MIA", "BOS", "MSP", "DTW", "FLL", "PHL", "BWI", "SLC", "DCA", "IAD", "SAN", "TPA", "HNL", "PDX", "MEX", "YVR", "YUL", "YYZ", "HNL", "OAK", "SJC"]

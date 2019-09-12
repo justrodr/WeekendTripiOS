@@ -95,7 +95,7 @@ extension ViewController {
                     let r = try JSONDecoder().decode(SessionResults.self, from: data)
                     let destination = self.nameOfDestination(sessionResult: r)
                     let origin = self.nameOfOrigin(sessionResult: r)
-                    self.sessionResultsArray.append(ResultWithOriginAndDestination(sessionResults: r, origin: origin, Destination: destination))
+                    self.sessionResultsArray.append(ResultWithOriginAndDestination(sessionResults: r, originCode: origin[0], destinationCode: destination[0], originName: origin[1], destinationName: destination[1]))
                     print("Leaving dispatch Group Create Session")
                     self.dispatchGroupPollSession.leave()
                 }
@@ -108,33 +108,36 @@ extension ViewController {
         }
     }
 
-    func nameOfDestination(sessionResult: SessionResults) -> String {
+    func nameOfDestination(sessionResult: SessionResults) -> [String] {
         print("Finding place code")
         let destinationID = Int(sessionResult.Query.DestinationPlace)
         let places = sessionResult.Places
         print("target: " + sessionResult.Query.DestinationPlace)
         for place in places {
             if place.Id == destinationID {
-                print(place.Name + "coolcoolcoolcool") //Where to get the full name of the city
-                return place.Code ?? "???"
+                let code = place.Code
+                let name = place.Name
+                return [code!, name]
             }
         }
         print("couldn't find place code")
-        return ""
+        return ["",""]
     }
 
-    func nameOfOrigin(sessionResult: SessionResults) -> String {
+    func nameOfOrigin(sessionResult: SessionResults) -> [String] {
         print("Finding place code")
         let originID = Int(sessionResult.Query.OriginPlace)
         let places = sessionResult.Places
         print("target: " + sessionResult.Query.OriginPlace)
         for place in places {
             if place.Id == originID {
-                return place.Code ?? "???"
+                let code = place.Code
+                let name = place.Name
+                return [code!, name]
             }
         }
         print("couldn't find place code")
-        return ""
+        return ["",""]
     }
 
 

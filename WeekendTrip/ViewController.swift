@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var destinationFullName: UILabel!
     @IBOutlet weak var originFullName: UILabel!
     @IBOutlet weak var tripDateLabel: UILabel!
+    @IBOutlet weak var flightCard: UIView!
     
     var resultRoundTrip: OneWayTrip?
     var bookNowLink: String?
@@ -30,6 +31,7 @@ class ViewController: UIViewController {
     var sessionResultsArray: [ResultWithOriginAndDestination] = []
     let dispatchGroupCreateSession = DispatchGroup()
     let dispatchGroupPollSession = DispatchGroup()
+    var weekendDates: [String] = []
 
     
     override func viewDidLoad() {
@@ -44,21 +46,26 @@ class ViewController: UIViewController {
         bookNowButton.layer.borderColor = UIColor.init(red: 169/255, green: 215/255, blue: 217/255, alpha: 1).cgColor
         bookNowButton.layer.borderWidth = 3
         bookNowButton.layer.cornerRadius = 20
+        var newFrame = flightCard.frame
+        newFrame.size.width = UIScreen.main.bounds.width - 32
+        newFrame.size.height = newFrame.size.width
+        newFrame.origin = CGPoint(x: 16, y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height/2) - (newFrame.size.height/2))
+        flightCard.frame = newFrame
+        flightCard.layer.cornerRadius = 40
+        flightCard.backgroundColor = UIColor(white: 1, alpha: 0.1)
+
         
+        weekendDates = getNearestWeekendDates()
         
-        toSymbolLabel.isHidden = true
-        originLabel.isHidden = true
-        destinationLabel.isHidden = true
-        errorMessageLabel.isHidden = true
+        flightCard.isHidden = true
         configureTapGesture()
         originInputField.delegate = self
-        bookNowButton.isHidden = true
         
     }
     
     func startSearch(origin: String) {
         print("Starting search")
-        let weekendDates = getNearestWeekendDates()
+        weekendDates = getNearestWeekendDates()
         requestForAllDestinations(origin: origin, outboundDate: weekendDates[0], inboundDate: weekendDates[1])
     }
     
@@ -67,7 +74,7 @@ class ViewController: UIViewController {
         if sortedTrips.count <= 0 {
             handleError()
         } else {
-            print(sortedTrips[0].destination)
+            print(sortedTrips[0].destinationCode)
             self.setResultScreen(trip: sortedTrips[0])
         }
     }
@@ -90,16 +97,15 @@ class ViewController: UIViewController {
     
     func getCheapestTrip(destination: ResultWithOriginAndDestination) -> RoundTrip {
         var roundTrips = [RoundTrip]()
-        print("**********" + destination.origin)
         for itinerary in destination.sessionResults.Itineraries {
             for pricingOption in itinerary.PricingOptions{
-                let newRoundTrip = RoundTrip.init(origin: destination.origin, destination: destination.Destination, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
+                let newRoundTrip = RoundTrip.init(originCode: destination.originCode, destinationCode: destination.destinationCode, originName: destination.originName, destinationName: destination.destinationName, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
                 roundTrips.append(newRoundTrip)
             }
         }
         roundTrips.sort(by: {$0.cost < $1.cost})
         if roundTrips.count <= 0 {
-            return RoundTrip(origin: "---", destination: "---", cost: 10000, link: "https://www.skyscanner.com/uh")
+            return RoundTrip(originCode: "---", destinationCode: "---", originName: "", destinationName: "", cost: 10000, link: "https://www.skyscanner.com/uh")
         }
         return roundTrips[0]
     }
@@ -121,13 +127,15 @@ class ViewController: UIViewController {
     func setResultScreen(trip: RoundTrip) {
         searchButton.isEnabled = true
         self.priceLabel.text = "$" + String(trip.cost)
-        self.destinationLabel.text = trip.destination
-        self.originLabel.text = trip.origin
-        toSymbolLabel.isHidden = false
-        originLabel.isHidden = false
-        destinationLabel.isHidden = false
-        bookNowButton.isHidden = false
+        self.destinationLabel.text = trip.destinationCode
+        self.originLabel.text = trip.originCode
+        self.destinationFullName.text = trip.destinationName
+        self.originFullName.text = trip.originName
+        self.tripDateLabel.text = weekendDates[0]
+        flightCard.isHidden = false
         bookNowLink = trip.link
+        originInputField.isHidden = true
+        searchButton.isHidden = true
     }
 
     private func configureTapGesture() {
