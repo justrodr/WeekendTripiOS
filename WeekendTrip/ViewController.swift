@@ -24,6 +24,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var originFullName: UILabel!
     @IBOutlet weak var tripDateLabel: UILabel!
     @IBOutlet weak var flightCard: UIView!
+    @IBOutlet weak var searchMessage: UILabel!
+    @IBOutlet weak var searchAgainButton: UIButton!
     
     var resultRoundTrip: OneWayTrip?
     var bookNowLink: String?
@@ -38,34 +40,29 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         toSymbolLabel.text = "\u{21C6}"
-        searchButton.setTitle("\u{2192}", for: .normal)
+        searchButton.setTitle("\u{26B2}", for: .normal)
         priceLabel.text = "Enter Origin"
         originInputField.layer.borderWidth = 3
         originInputField.layer.borderColor = UIColor.init(red: 42/255, green: 140/255, blue: 122/255, alpha: 1).cgColor
         originInputField.layer.cornerRadius = 8
-        bookNowButton.layer.borderColor = UIColor.init(red: 169/255, green: 215/255, blue: 217/255, alpha: 1).cgColor
-        bookNowButton.layer.borderWidth = 3
-        bookNowButton.layer.cornerRadius = 20
-        var newFrame = flightCard.frame
-        newFrame.size.width = UIScreen.main.bounds.width - 32
-        newFrame.size.height = newFrame.size.width
-        newFrame.origin = CGPoint(x: 16, y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height/2) - (newFrame.size.height/2))
-        flightCard.frame = newFrame
+        bookNowButton.layer.cornerRadius = 30
+        print(flightCard.frame.height)
         flightCard.layer.cornerRadius = 40
         flightCard.backgroundColor = UIColor(white: 1, alpha: 0.1)
 
         
-        weekendDates = getNearestWeekendDates()
-        
+        weekendDates = getNearestWeekendDatesForSearch()
         flightCard.isHidden = true
+        searchAgainButton.isHidden = true
         configureTapGesture()
         originInputField.delegate = self
+        errorMessageLabel.isHidden = true
         
     }
     
     func startSearch(origin: String) {
         print("Starting search")
-        weekendDates = getNearestWeekendDates()
+        weekendDates = getNearestWeekendDatesForSearch()
         requestForAllDestinations(origin: origin, outboundDate: weekendDates[0], inboundDate: weekendDates[1])
     }
     
@@ -131,10 +128,12 @@ class ViewController: UIViewController {
         self.originLabel.text = trip.originCode
         self.destinationFullName.text = trip.destinationName
         self.originFullName.text = trip.originName
-        self.tripDateLabel.text = weekendDates[0]
+        self.tripDateLabel.text = getNearestWeekendDatesForDisplay()
         flightCard.isHidden = false
+        searchAgainButton.isHidden = false
         bookNowLink = trip.link
         originInputField.isHidden = true
+        searchMessage.isHidden = true
         searchButton.isHidden = true
     }
 
@@ -157,7 +156,9 @@ class ViewController: UIViewController {
         self.originInputField.text = code
         if stringIsAnAirportCode(input: code ?? "") {
             self.originLabel.text = code
-            self.priceLabel.text = "Searching..."
+            self.searchMessage.text = "Searching for trips from " + code! + "..."
+            self.originInputField.isHidden = true
+            self.searchButton.isHidden = true
             startSearch(origin: code ?? "")
         } else {
             if textFieldInput?.count ?? 0 <= 3 {
@@ -175,6 +176,15 @@ class ViewController: UIViewController {
         let url = URL(string: bookNowLink ?? "https://www.skyscanner.com/uh")
         let safariVC = SFSafariViewController(url: url!)
         present(safariVC, animated: true)
+    }
+    
+    @IBAction func searchAgainButtonPressed(_ sender: Any) {
+        flightCard.isHidden = true
+        searchAgainButton.isHidden = true
+        searchMessage.isHidden = false
+        originInputField.isHidden = false
+        searchButton.isHidden = false
+        searchMessage.text = "Wanna travel this weekend? Lookup the cheapest trip from your city"
     }
     
     private func stringIsAnAirportCode(input: String) -> Bool {

@@ -140,8 +140,7 @@ extension ViewController {
         return ["",""]
     }
 
-
-    func getNearestWeekendDates() -> [String] {
+    func getRawNearestDates() -> [Date] {
         let today = Date()
         let calendar = Calendar.current
         let todayComponents = calendar.dateComponents([.year, .month, .day, .weekday], from: today)
@@ -179,23 +178,54 @@ extension ViewController {
             break
         }
         
+        var nextWeekendDates: [Date] = []
+
+        if let nextFridayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday, to: today) {
+            nextWeekendDates.append(nextFridayDate)
+        }
+        
+        if let nextSundayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday + 2, to: today) {
+            nextWeekendDates.append(nextSundayDate)
+        }
+        
+        return nextWeekendDates
+    }
+
+    func getNearestWeekendDatesForSearch() -> [String] {
+        let dates = getRawNearestDates()
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         var nextWeekendDates: [String] = []
         
         var nextFriday: String
-        if let nextFridayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday, to: today) {
-            nextFriday = formatter.string(from: nextFridayDate)
-            print(nextFriday)
-            nextWeekendDates.append(nextFriday)
-        }
+        nextFriday = formatter.string(from: dates[0])
+        print(nextFriday)
+        nextWeekendDates.append(nextFriday)
         
         var nextSunday: String
-        if let nextSundayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday + 2, to: today) {
-            nextSunday = formatter.string(from: nextSundayDate)
-            print(nextSunday)
-            nextWeekendDates.append(nextSunday)
-        }
+        nextSunday = formatter.string(from: dates[1])
+        print(nextSunday)
+        nextWeekendDates.append(nextSunday)
+        
+        return nextWeekendDates
+        
+    }
+    
+    func getNearestWeekendDatesForDisplay() -> String {
+        let dates = getRawNearestDates()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        var nextWeekendDates: String
+        
+        var nextFriday: String
+        nextFriday = formatter.string(from: dates[0])
+        
+        var nextSunday: String
+        nextSunday = formatter.string(from: dates[1])
+        
+        nextWeekendDates = "Fri " + nextFriday + " - " + "Sun " + nextSunday
         
         return nextWeekendDates
         

@@ -64,9 +64,9 @@ struct ResultWithOriginAndDestination {
     let destinationName: String
 }
 
-//let possibleDestinations: [String] = ["IAH", "JFK", "SFO", "ATL", "ABQ", "AUS", "CLT", "ORD", "CVG", "DFW", "DEN", "EWR", "LAX", "LGA", "MDW", "SEA", "MCO", "PHX", "MIA", "BOS", "MSP", "DTW", "FLL", "PHL", "BWI", "SLC", "DCA", "IAD", "SAN", "TPA", "HNL", "PDX", "MEX", "YVR", "YUL", "YYZ", "HNL", "OAK", "SJC"]
+let possibleDestinations: [String] = ["IAH", "JFK", "SFO", "ATL", "ABQ", "AUS", "CLT", "ORD", "CVG", "DFW", "DEN", "EWR", "LAX", "LGA", "MDW", "SEA", "MCO", "PHX", "MIA", "BOS", "MSP", "DTW", "FLL", "PHL", "BWI", "SLC", "DCA", "IAD", "SAN", "TPA", "HNL", "PDX", "MEX", "YVR", "YUL", "YYZ", "HNL", "OAK", "SJC"]
 
-let possibleDestinations: [String] = ["ATL", "ABQ", "AUS"] //Short list
+//let possibleDestinations: [String] = ["ATL", "ABQ", "AUS"] //Short list
 
 //let texasPossibleDestinations: [String] = ["IAH", "HOU", "AUS", "DFW", "SAT", "CLL", "MCO", "MIA", "LGA", "JFK", "EWR", "SEA", "LAX", "DEN", "ORD", "PHL", "MSY", "ATL", "DCA", "IAD", "SAN", "FLL", "TPA", "DTW", "CLT", "SFO", "SJC", "OAK"] //For Texans
 
