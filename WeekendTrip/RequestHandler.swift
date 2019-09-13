@@ -12,7 +12,7 @@ extension ViewController {
 
     func requestForAllDestinations(origin: String, outboundDate: String, inboundDate: String) {
         responseLinks = []
-        for destination in possibleDestinations {
+        for destination in possibleDestinations[origin]! {
             createSession(origin: origin, destination: destination, inboundDate: inboundDate, outboundDate: outboundDate)
         }
         dispatchGroupCreateSession.notify(queue: .main) {

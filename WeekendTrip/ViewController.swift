@@ -189,7 +189,7 @@ class ViewController: UIViewController {
     
     private func stringIsAnAirportCode(input: String) -> Bool {
         for destination in possibleDestinations {
-            if input == destination {
+            if input == destination.key {
                 return true
             }
         }
