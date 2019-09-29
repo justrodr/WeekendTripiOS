@@ -14,5 +14,10 @@ class OriginTableCell: UITableViewCell {
     @IBOutlet weak var OriginNameLabel: UILabel!
     @IBOutlet weak var TripDateLabel: UILabel!
     
+    func setOriginCell(origin: RoundTrip, date: String) {
+        OriginCodeLabel.text = origin.originCode
+        OriginNameLabel.text = origin.originName
+        TripDateLabel.text = date
+    }
     
 }

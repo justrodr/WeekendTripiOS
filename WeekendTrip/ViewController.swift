@@ -17,38 +17,45 @@ class ViewController: UIViewController {
     @IBOutlet weak var errorMessageLabel: UILabel!
     @IBOutlet weak var searchMessage: UILabel!
     @IBOutlet weak var resultsTableView: UITableView!
+    @IBOutlet weak var backButton: UIButton!
     
     var bookNowLink: String?
     var sessionResultsArray: [ResultWithOriginAndDestination] = []
     var weekendDates: [String] = []
     var viewModel: ViewModel = ViewModel()
     var resultTrips: [RoundTrip] = []
+    var weekendDateForLabel: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        toSymbolLabel.text = "\u{21C6}"
-//        self.originInputField.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters
         searchButton.setTitle("\u{26B2}", for: .normal)
+        backButton.setTitle("\u{26B2}", for: .normal)
         originInputField.layer.borderWidth = 5
         originInputField.layer.borderColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1).cgColor
         originInputField.layer.cornerRadius = 20
         resultsTableView.backgroundColor = UIColor.init(red: 175/255, green: 193/255, blue: 216/255, alpha: 1)
-        resultsTableView.delegate = self
         resultsTableView.dataSource = self
-        resultsTableView.rowHeight = 200
+        resultsTableView.delegate = self
+        
         
         configureTapGesture()
         originInputField.delegate = self
         errorMessageLabel.isHidden = true
         resultsTableView.isHidden = true
+        backButton.isHidden = true
+        weekendDateForLabel = viewModel.getNearestWeekendDatesForDisplay()
         
     }
     
     func startSearch(origin: String) {
         print("Starting search")
-        resultTrips = viewModel.startSearch(origin: origin)
-        sortThroughResults(sortedTrips: resultTrips)
+        DispatchQueue.global(qos: .background).async {
+            self.resultTrips = self.viewModel.startSearch(origin: origin)
+            DispatchQueue.main.async {
+                self.sortThroughResults(sortedTrips: self.resultTrips)
+            }
+        }
     }
     
     func sortThroughResults(sortedTrips: [RoundTrip]) {
@@ -67,40 +74,20 @@ class ViewController: UIViewController {
         self.searchButton.isEnabled = true
     }
     
-    func originAndDestinationisValid(origin: String, destination: String) -> Bool {
-        if origin == "HOU" || origin == "AUS" || origin == "DFW" || origin == "SAT" || origin == "CLL" {
-            if destination == "HOU" || destination == "AUS" || destination == "DFW" || destination == "SAT" || destination == "CLL" {
-                return false
-            }
-        }
-        if origin == "SFO" || origin == "OAK" || origin == "SJC" {
-            if destination == "SFO" || destination == "OAK" || destination == "SJC" {
-                return false
-            }
-        }
-        return true
-    }
-    
     func setResultScreen(trip: RoundTrip) {
         searchButton.isEnabled = true
-//        self.priceLabel.text = "$" + String(trip.cost)
-//        self.destinationLabel.text = trip.destinationCode
-//        self.originLabel.text = trip.originCode
-//        self.destinationFullName.text = trip.destinationName
-//        self.originFullName.text = trip.originName
-//        self.tripDateLabel.text = viewModel.getNearestWeekendDatesForDisplay()
-//        flightCard.isHidden = false
-//        searchAgainButton.isHidden = false
         self.resultsTableView.reloadData()
         resultsTableView.isHidden = false
         bookNowLink = trip.link
         originInputField.isHidden = true
         searchMessage.isHidden = true
         searchButton.isHidden = true
+        backButton.isHidden = false
     }
 
     private func configureTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.handleTap))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
     
@@ -117,7 +104,6 @@ class ViewController: UIViewController {
         print("Searching for: " + code!)
         self.originInputField.text = code
         if stringIsAnAirportCode(input: code ?? "") {
-//            self.originLabel.text = code
             self.searchMessage.text = "Searching for trips from " + code! + "..."
             self.originInputField.isHidden = true
             self.searchButton.isHidden = true
@@ -134,15 +120,9 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func bookNowButtonPressed(_ sender: Any) {
-        let url = URL(string: bookNowLink ?? "https://www.skyscanner.com/uh")
-        let safariVC = SFSafariViewController(url: url!)
-        present(safariVC, animated: true)
-    }
-    
     @IBAction func searchAgainButtonPressed(_ sender: Any) {
         resultsTableView.isHidden = true
-//        searchAgainButton.isHidden = true
+        backButton.isHidden = true
         searchMessage.isHidden = false
         originInputField.isHidden = false
         searchButton.isHidden = false
@@ -167,19 +147,42 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let destination = resultTrips[indexPath.row]
+        if (indexPath.row == 0) {
+            let origin = resultTrips[0]
+            let date = weekendDateForLabel
+            let cell = resultsTableView.dequeueReusableCell(withIdentifier: "OriginTableCell") as! OriginTableCell
+            cell.setOriginCell(origin: origin, date: date)
+            return cell
+        }
+        
+        let destination = resultTrips[indexPath.row - 1]
         let cell = resultsTableView.dequeueReusableCell(withIdentifier: "DestinationCell") as! DestinationCell
         cell.setDestinationCell(roundTrip: destination)
         return cell
+
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath.row == 0) {
+            return 300
+        } else {
+            return 200
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("dang")
+        let url = URL(string: resultTrips[indexPath.row - 1].link)
+        let safariVC = SFSafariViewController(url: url!)
+        present(safariVC, animated: true)
+    }
     
 }
 
 extension ViewController : UITextFieldDelegate {
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        textField.resignFirstResponder()
+//        return true
+//    }
 }
