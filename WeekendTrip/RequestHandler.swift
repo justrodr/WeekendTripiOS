@@ -8,26 +8,47 @@
 
 import Foundation
 
-extension ViewController {
-
-    func requestForAllDestinations(origin: String, outboundDate: String, inboundDate: String) {
+class RequestHandler : NSObject {
+    
+    var responseLinks: [String] = []
+    let dispatchGroupCreateSession = DispatchGroup()
+    let dispatchGroupPollSession = DispatchGroup()
+    var sessionResultsArray: [ResultWithOriginAndDestination] = []
+    var searchIsFinished: Bool = false
+    var res: [RoundTrip] = []
+    
+    func search(origin: String, outboundDate: String, inboundDate: String) -> [ResultWithOriginAndDestination]{
+        requestForAllDestinations(origin: origin, outboundDate: outboundDate, inboundDate: inboundDate)
+        pollForAllDestinations()
+        return sessionResultsArray
+    }
+    
+    func requestForAllDestinations(origin: String, outboundDate: String, inboundDate: String) -> Bool {
         responseLinks = []
         for destination in possibleDestinations[origin]! {
             createSession(origin: origin, destination: destination, inboundDate: inboundDate, outboundDate: outboundDate)
         }
-        dispatchGroupCreateSession.notify(queue: .main) {
-            self.pollForAllDestinations()
-        }
+//        dispatchGroupCreateSession.notify(queue: .main) {
+////            self.pollForAllDestinations()
+//            print("waiting")
+//            semaphore.signal()
+//        }
+        dispatchGroupCreateSession.wait()
+        print("Awesome")
+        return true
     }
-
-    func pollForAllDestinations() {
+    
+    func pollForAllDestinations() -> Bool {
         sessionResultsArray = []
         for responseLink in responseLinks {
             pollSessionResults(sessionKey: responseLink)
         }
-        dispatchGroupPollSession.notify(queue: .main) {
-            self.sortThroughResults()
-        }
+//        dispatchGroupPollSession.notify(queue: .main) {
+//            self.searchIsFinished = true
+//            print("Finished polling data2")
+//        }
+        dispatchGroupPollSession.wait()
+        return true
     }
 
     func createSession(origin: String, destination: String, inboundDate: String, outboundDate: String) {
@@ -58,7 +79,7 @@ extension ViewController {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             
             if let err = error {
-                self.handleError()
+//                self.handleError()
                 print("Leaving dispatch Group Create Session with Error")
                 self.dispatchGroupCreateSession.leave()
                 return
@@ -107,7 +128,7 @@ extension ViewController {
             }.resume()
         }
     }
-
+    
     func nameOfDestination(sessionResult: SessionResults) -> [String] {
         print("Finding place code")
         let destinationID = Int(sessionResult.Query.DestinationPlace)
@@ -139,97 +160,7 @@ extension ViewController {
         print("couldn't find place code")
         return ["",""]
     }
-
-    func getRawNearestDates() -> [Date] {
-        let today = Date()
-        let calendar = Calendar.current
-        let todayComponents = calendar.dateComponents([.year, .month, .day, .weekday], from: today)
-        var daysUntilNextFriday: Int = 0
-        switch todayComponents.weekday {
-        case 1:
-            daysUntilNextFriday = 5
-            print("it's sunday")
-            break
-        case 2:
-            daysUntilNextFriday = 4
-            print("it's monday")
-            break
-        case 3:
-            daysUntilNextFriday = 3
-            print("it's tuesday")
-            break
-        case 4:
-            daysUntilNextFriday = 2
-            print("it's wednesday")
-            break
-        case 5:
-            daysUntilNextFriday = 1
-            print("it's thursday")
-            break
-        case 6:
-            daysUntilNextFriday = 7
-            print("it's friday")
-            break
-        case 7:
-            daysUntilNextFriday = 6
-            print("it's saturday")
-            break
-        default:
-            break
-        }
-        
-        var nextWeekendDates: [Date] = []
-
-        if let nextFridayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday, to: today) {
-            nextWeekendDates.append(nextFridayDate)
-        }
-        
-        if let nextSundayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday + 2, to: today) {
-            nextWeekendDates.append(nextSundayDate)
-        }
-        
-        return nextWeekendDates
-    }
-
-    func getNearestWeekendDatesForSearch() -> [String] {
-        let dates = getRawNearestDates()
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        var nextWeekendDates: [String] = []
-        
-        var nextFriday: String
-        nextFriday = formatter.string(from: dates[0])
-        print(nextFriday)
-        nextWeekendDates.append(nextFriday)
-        
-        var nextSunday: String
-        nextSunday = formatter.string(from: dates[1])
-        print(nextSunday)
-        nextWeekendDates.append(nextSunday)
-        
-        return nextWeekendDates
-        
-    }
     
-    func getNearestWeekendDatesForDisplay() -> String {
-        let dates = getRawNearestDates()
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
-        var nextWeekendDates: String
-        
-        var nextFriday: String
-        nextFriday = formatter.string(from: dates[0])
-        
-        var nextSunday: String
-        nextSunday = formatter.string(from: dates[1])
-        
-        nextWeekendDates = "Fri " + nextFriday + " - " + "Sun " + nextSunday
-        
-        return nextWeekendDates
-        
-    }
 }
 
 extension Dictionary {

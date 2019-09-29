@@ -33,17 +33,6 @@ struct Currency: Decodable {
     let ThousandsSeparator: String
 }
 
-//struct Place: Decodable {
-//    let CityId: String
-//    let CityName: String
-//    let CountryName: String
-//    let IataCode: String
-//    let Name: String
-//    let PlaceId: Int
-//    let SkyscannerCode: String
-//    //    let FlightType: String
-//}
-
 struct Quote: Decodable {
     let Direct: Bool
     let MinPrice: Int

@@ -12,64 +12,49 @@ import SafariServices
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var originInputField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
-    @IBOutlet weak var destinationLabel: UILabel!
-    @IBOutlet weak var originLabel: UILabel!
-    @IBOutlet weak var toSymbolLabel: UILabel!
     @IBOutlet weak var errorMessageLabel: UILabel!
-    @IBOutlet weak var bookNowButton: UIButton!
-    @IBOutlet weak var destinationFullName: UILabel!
-    @IBOutlet weak var originFullName: UILabel!
-    @IBOutlet weak var tripDateLabel: UILabel!
-    @IBOutlet weak var flightCard: UIView!
     @IBOutlet weak var searchMessage: UILabel!
-    @IBOutlet weak var searchAgainButton: UIButton!
+    @IBOutlet weak var resultsTableView: UITableView!
     
-    var resultRoundTrip: OneWayTrip?
     var bookNowLink: String?
-    var responseLinks: [String] = []
     var sessionResultsArray: [ResultWithOriginAndDestination] = []
-    let dispatchGroupCreateSession = DispatchGroup()
-    let dispatchGroupPollSession = DispatchGroup()
     var weekendDates: [String] = []
-
+    var viewModel: ViewModel = ViewModel()
+    var resultTrips: [RoundTrip] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        toSymbolLabel.text = "\u{21C6}"
+//        toSymbolLabel.text = "\u{21C6}"
+//        self.originInputField.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters
         searchButton.setTitle("\u{26B2}", for: .normal)
-        priceLabel.text = "Enter Origin"
-        originInputField.layer.borderWidth = 3
-        originInputField.layer.borderColor = UIColor.init(red: 42/255, green: 140/255, blue: 122/255, alpha: 1).cgColor
-        originInputField.layer.cornerRadius = 8
-        bookNowButton.layer.cornerRadius = 30
-        print(flightCard.frame.height)
-        flightCard.layer.cornerRadius = 40
-        flightCard.backgroundColor = UIColor(white: 1, alpha: 0.1)
-
+        originInputField.layer.borderWidth = 5
+        originInputField.layer.borderColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1).cgColor
+        originInputField.layer.cornerRadius = 20
+        resultsTableView.backgroundColor = UIColor.init(red: 175/255, green: 193/255, blue: 216/255, alpha: 1)
+        resultsTableView.delegate = self
+        resultsTableView.dataSource = self
+        resultsTableView.rowHeight = 200
         
-        weekendDates = getNearestWeekendDatesForSearch()
-        flightCard.isHidden = true
-        searchAgainButton.isHidden = true
         configureTapGesture()
         originInputField.delegate = self
         errorMessageLabel.isHidden = true
+        resultsTableView.isHidden = true
         
     }
     
     func startSearch(origin: String) {
         print("Starting search")
-        weekendDates = getNearestWeekendDatesForSearch()
-        requestForAllDestinations(origin: origin, outboundDate: weekendDates[0], inboundDate: weekendDates[1])
+        resultTrips = viewModel.startSearch(origin: origin)
+        sortThroughResults(sortedTrips: resultTrips)
     }
     
-    func sortThroughResults() {
-        let sortedTrips = self.getCheapestTrips(sessionResults: sessionResultsArray)
+    func sortThroughResults(sortedTrips: [RoundTrip]) {
+        print("Starting sorting")
         if sortedTrips.count <= 0 {
-            handleError()
+               handleError()
         } else {
             print(sortedTrips[0].destinationCode)
             self.setResultScreen(trip: sortedTrips[0])
@@ -77,34 +62,9 @@ class ViewController: UIViewController {
     }
     
     func handleError() {
-        self.priceLabel.text = "😭👩‍💻⏸"
         self.errorMessageLabel.text = "Oops something went wrong. Check your internet connection and try again."
         self.errorMessageLabel.isHidden = false
         self.searchButton.isEnabled = true
-    }
-    
-    func getCheapestTrips(sessionResults: [ResultWithOriginAndDestination]) -> [RoundTrip] {
-        var cheapestTrips = [RoundTrip]()
-        for destination in sessionResults {
-            cheapestTrips.append(getCheapestTrip(destination: destination))
-        }
-        cheapestTrips.sort(by: { $0.cost < $1.cost })
-        return cheapestTrips
-    }
-    
-    func getCheapestTrip(destination: ResultWithOriginAndDestination) -> RoundTrip {
-        var roundTrips = [RoundTrip]()
-        for itinerary in destination.sessionResults.Itineraries {
-            for pricingOption in itinerary.PricingOptions{
-                let newRoundTrip = RoundTrip.init(originCode: destination.originCode, destinationCode: destination.destinationCode, originName: destination.originName, destinationName: destination.destinationName, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
-                roundTrips.append(newRoundTrip)
-            }
-        }
-        roundTrips.sort(by: {$0.cost < $1.cost})
-        if roundTrips.count <= 0 {
-            return RoundTrip(originCode: "---", destinationCode: "---", originName: "", destinationName: "", cost: 10000, link: "https://www.skyscanner.com/uh")
-        }
-        return roundTrips[0]
     }
     
     func originAndDestinationisValid(origin: String, destination: String) -> Bool {
@@ -123,14 +83,16 @@ class ViewController: UIViewController {
     
     func setResultScreen(trip: RoundTrip) {
         searchButton.isEnabled = true
-        self.priceLabel.text = "$" + String(trip.cost)
-        self.destinationLabel.text = trip.destinationCode
-        self.originLabel.text = trip.originCode
-        self.destinationFullName.text = trip.destinationName
-        self.originFullName.text = trip.originName
-        self.tripDateLabel.text = getNearestWeekendDatesForDisplay()
-        flightCard.isHidden = false
-        searchAgainButton.isHidden = false
+//        self.priceLabel.text = "$" + String(trip.cost)
+//        self.destinationLabel.text = trip.destinationCode
+//        self.originLabel.text = trip.originCode
+//        self.destinationFullName.text = trip.destinationName
+//        self.originFullName.text = trip.originName
+//        self.tripDateLabel.text = viewModel.getNearestWeekendDatesForDisplay()
+//        flightCard.isHidden = false
+//        searchAgainButton.isHidden = false
+        self.resultsTableView.reloadData()
+        resultsTableView.isHidden = false
         bookNowLink = trip.link
         originInputField.isHidden = true
         searchMessage.isHidden = true
@@ -155,10 +117,11 @@ class ViewController: UIViewController {
         print("Searching for: " + code!)
         self.originInputField.text = code
         if stringIsAnAirportCode(input: code ?? "") {
-            self.originLabel.text = code
+//            self.originLabel.text = code
             self.searchMessage.text = "Searching for trips from " + code! + "..."
             self.originInputField.isHidden = true
             self.searchButton.isHidden = true
+            print("now searching")
             startSearch(origin: code ?? "")
         } else {
             if textFieldInput?.count ?? 0 <= 3 {
@@ -169,7 +132,6 @@ class ViewController: UIViewController {
             searchButton.isEnabled = true
             errorMessageLabel.isHidden = false
         }
-        
     }
     
     @IBAction func bookNowButtonPressed(_ sender: Any) {
@@ -179,8 +141,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func searchAgainButtonPressed(_ sender: Any) {
-        flightCard.isHidden = true
-        searchAgainButton.isHidden = true
+        resultsTableView.isHidden = true
+//        searchAgainButton.isHidden = true
         searchMessage.isHidden = false
         originInputField.isHidden = false
         searchButton.isHidden = false
@@ -195,6 +157,22 @@ class ViewController: UIViewController {
         }
         return false
     }
+    
+}
+
+extension ViewController : UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return resultTrips.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let destination = resultTrips[indexPath.row]
+        let cell = resultsTableView.dequeueReusableCell(withIdentifier: "DestinationCell") as! DestinationCell
+        cell.setDestinationCell(roundTrip: destination)
+        return cell
+    }
+    
     
 }
 

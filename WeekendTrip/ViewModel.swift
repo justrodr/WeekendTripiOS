@@ -8,35 +8,134 @@
 
 import Foundation
 
-class OneWayTrip {
-    var origin: String
-    var destination: String
-    var cost: Int
+class ViewModel : NSObject {
     
-    init(origin: String, destination: String, cost: Int) {
-        self.origin = origin
-        self.destination = destination
-        self.cost = cost
+    var requestHandler : RequestHandler = RequestHandler()
+    
+    func startSearch(origin: String) -> [RoundTrip] {
+        print("Starting search")
+        let weekendDates = getNearestWeekendDatesForSearch()
+        let sessionResultsArray = requestHandler.search(origin: origin, outboundDate: weekendDates[0], inboundDate: weekendDates[1])
+        print("Finished polling")
+        print(requestHandler.sessionResultsArray.count)
+        return getCheapestTrips(sessionResults: sessionResultsArray)
+    }
+    
+    func getCheapestTrips(sessionResults: [ResultWithOriginAndDestination]) -> [RoundTrip] {
+        var cheapestTrips = [RoundTrip]()
+        for destination in sessionResults {
+            cheapestTrips.append(getCheapestTrip(destination: destination))
+        }
+        cheapestTrips.sort(by: { $0.cost < $1.cost })
+        return cheapestTrips
+    }
+    
+    func getCheapestTrip(destination: ResultWithOriginAndDestination) -> RoundTrip {
+        var roundTrips = [RoundTrip]()
+        for itinerary in destination.sessionResults.Itineraries {
+            for pricingOption in itinerary.PricingOptions{
+                let newRoundTrip = RoundTrip.init(originCode: destination.originCode, destinationCode: destination.destinationCode, originName: destination.originName, destinationName: destination.destinationName, cost: pricingOption.Price, link: pricingOption.DeeplinkUrl)
+                roundTrips.append(newRoundTrip)
+            }
+        }
+        roundTrips.sort(by: {$0.cost < $1.cost})
+        if roundTrips.count <= 0 {
+            return RoundTrip(originCode: "---", destinationCode: "---", originName: "", destinationName: "", cost: 10000, link: "https://www.skyscanner.com/uh")
+        }
+        return roundTrips[0]
+    }
+    
+    func getRawNearestDates() -> [Date] {
+        let today = Date()
+        let calendar = Calendar.current
+        let todayComponents = calendar.dateComponents([.year, .month, .day, .weekday], from: today)
+        var daysUntilNextFriday: Int = 0
+        switch todayComponents.weekday {
+        case 1:
+            daysUntilNextFriday = 5
+            print("it's sunday")
+            break
+        case 2:
+            daysUntilNextFriday = 4
+            print("it's monday")
+            break
+        case 3:
+            daysUntilNextFriday = 3
+            print("it's tuesday")
+            break
+        case 4:
+            daysUntilNextFriday = 2
+            print("it's wednesday")
+            break
+        case 5:
+            daysUntilNextFriday = 1
+            print("it's thursday")
+            break
+        case 6:
+            daysUntilNextFriday = 7
+            print("it's friday")
+            break
+        case 7:
+            daysUntilNextFriday = 6
+            print("it's saturday")
+            break
+        default:
+            break
+        }
+        
+        var nextWeekendDates: [Date] = []
+
+        if let nextFridayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday, to: today) {
+            nextWeekendDates.append(nextFridayDate)
+        }
+        
+        if let nextSundayDate = calendar.date(byAdding: .day, value: daysUntilNextFriday + 2, to: today) {
+            nextWeekendDates.append(nextSundayDate)
+        }
+        
+        return nextWeekendDates
+    }
+
+    func getNearestWeekendDatesForSearch() -> [String] {
+        let dates = getRawNearestDates()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        var nextWeekendDates: [String] = []
+        
+        var nextFriday: String
+        nextFriday = formatter.string(from: dates[0])
+        print(nextFriday)
+        nextWeekendDates.append(nextFriday)
+        
+        var nextSunday: String
+        nextSunday = formatter.string(from: dates[1])
+        print(nextSunday)
+        nextWeekendDates.append(nextSunday)
+        
+        return nextWeekendDates
+        
+    }
+    
+    func getNearestWeekendDatesForDisplay() -> String {
+        let dates = getRawNearestDates()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        var nextWeekendDates: String
+        
+        var nextFriday: String
+        nextFriday = formatter.string(from: dates[0])
+        
+        var nextSunday: String
+        nextSunday = formatter.string(from: dates[1])
+        
+        nextWeekendDates = "Fri " + nextFriday + " - " + "Sun " + nextSunday
+        
+        return nextWeekendDates
+        
     }
 }
-
-//class RoundTrip {
-//    var origin: String
-//    var destination: String
-//    var cost: Float
-//    var link: String
-//    var originFullName: String
-//    var destinationFullName: String
-//
-//    init(origin: String, destination: String, cost: Float, link: String, originFullName: String, destinationFullName: String) {
-//        self.origin = origin
-//        self.destination = destination
-//        self.cost = cost
-//        self.link = link
-//        self.originFullName = originFullName
-//        self.destinationFullName = destinationFullName
-//    }
-//}
 
 class RoundTrip {
     var originCode: String
