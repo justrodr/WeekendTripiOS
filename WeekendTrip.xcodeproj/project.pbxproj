@@ -21,6 +21,9 @@
 		A3E144D1FEA4E2F47EB338EB /* Pods_WeekendTripTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3286F726A969B2BBB45E985 /* Pods_WeekendTripTests.framework */; };
 		E9C5DA4E234061A000502DFD /* OriginTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C5DA4D234061A000502DFD /* OriginTableCell.swift */; };
 		E9C5DA502340639B00502DFD /* DestinationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C5DA4F2340639B00502DFD /* DestinationCell.swift */; };
+		E9D2B21C2341AEC600F61628 /* 1298-floating-cloud.json in Resources */ = {isa = PBXBuildFile; fileRef = E9D2B21B2341AEC600F61628 /* 1298-floating-cloud.json */; };
+		E9D2B21E2341B19800F61628 /* lf30_editor_R0bQvy.json in Resources */ = {isa = PBXBuildFile; fileRef = E9D2B21D2341B19800F61628 /* lf30_editor_R0bQvy.json */; };
+		E9D2B2202341B7F100F61628 /* 2322-cloud-loader-v1.json in Resources */ = {isa = PBXBuildFile; fileRef = E9D2B21F2341B7F100F61628 /* 2322-cloud-loader-v1.json */; };
 		FD9D09E4F7F0830A0FDBE0DA /* Pods_WeekendTrip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D686D694F8605F218C6B12D /* Pods_WeekendTrip.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +72,9 @@
 		DD1C493B772474231DB0D96E /* Pods-WeekendTrip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeekendTrip.debug.xcconfig"; path = "Target Support Files/Pods-WeekendTrip/Pods-WeekendTrip.debug.xcconfig"; sourceTree = "<group>"; };
 		E9C5DA4D234061A000502DFD /* OriginTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginTableCell.swift; sourceTree = "<group>"; };
 		E9C5DA4F2340639B00502DFD /* DestinationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationCell.swift; sourceTree = "<group>"; };
+		E9D2B21B2341AEC600F61628 /* 1298-floating-cloud.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "1298-floating-cloud.json"; path = "../../../../../Downloads/1298-floating-cloud.json"; sourceTree = "<group>"; };
+		E9D2B21D2341B19800F61628 /* lf30_editor_R0bQvy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = lf30_editor_R0bQvy.json; path = ../../../../../Downloads/lf30_editor_R0bQvy.json; sourceTree = "<group>"; };
+		E9D2B21F2341B7F100F61628 /* 2322-cloud-loader-v1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "2322-cloud-loader-v1.json"; path = "../../../../../Downloads/2322-cloud-loader-v1.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +146,9 @@
 				7027F80F22ADE31A002E5B5C /* AppDelegate.swift */,
 				7027F81122ADE31A002E5B5C /* ViewController.swift */,
 				E9C5DA4D234061A000502DFD /* OriginTableCell.swift */,
+				E9D2B21F2341B7F100F61628 /* 2322-cloud-loader-v1.json */,
+				E9D2B21D2341B19800F61628 /* lf30_editor_R0bQvy.json */,
+				E9D2B21B2341AEC600F61628 /* 1298-floating-cloud.json */,
 				E9C5DA4F2340639B00502DFD /* DestinationCell.swift */,
 				70FAB8CE22DA84850012472F /* Model.swift */,
 				70FAB8D022DA9E950012472F /* ViewModel.swift */,
@@ -288,8 +297,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9D2B2202341B7F100F61628 /* 2322-cloud-loader-v1.json in Resources */,
 				7027F81A22ADE31B002E5B5C /* LaunchScreen.storyboard in Resources */,
+				E9D2B21C2341AEC600F61628 /* 1298-floating-cloud.json in Resources */,
 				7027F81722ADE31B002E5B5C /* Assets.xcassets in Resources */,
+				E9D2B21E2341B19800F61628 /* lf30_editor_R0bQvy.json in Resources */,
 				7027F81522ADE31A002E5B5C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

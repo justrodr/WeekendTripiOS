@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import Lottie
 
 
 class ViewController: UIViewController {
@@ -18,6 +19,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchMessage: UILabel!
     @IBOutlet weak var resultsTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var loadingAnimation: AnimationView!
+    
     
     var bookNowLink: String?
     var sessionResultsArray: [ResultWithOriginAndDestination] = []
@@ -44,6 +47,7 @@ class ViewController: UIViewController {
         errorMessageLabel.isHidden = true
         resultsTableView.isHidden = true
         backButton.isHidden = true
+        loadingAnimation.isHidden = true
         weekendDateForLabel = viewModel.getNearestWeekendDatesForDisplay()
         
     }
@@ -83,6 +87,7 @@ class ViewController: UIViewController {
         searchMessage.isHidden = true
         searchButton.isHidden = true
         backButton.isHidden = false
+        loadingAnimation.isHidden = true
     }
 
     private func configureTapGesture() {
@@ -104,10 +109,13 @@ class ViewController: UIViewController {
         print("Searching for: " + code!)
         self.originInputField.text = code
         if stringIsAnAirportCode(input: code ?? "") {
-            self.searchMessage.text = "Searching for trips from " + code! + "..."
+//            self.searchMessage.text = "Searching for trips from " + code! + "..."
+            self.searchMessage.text = ""
             self.originInputField.isHidden = true
             self.searchButton.isHidden = true
             print("now searching")
+            loadingAnimation.isHidden = false
+            startAnimation()
             startSearch(origin: code ?? "")
         } else {
             if textFieldInput?.count ?? 0 <= 3 {
@@ -123,6 +131,7 @@ class ViewController: UIViewController {
     @IBAction func searchAgainButtonPressed(_ sender: Any) {
         resultsTableView.isHidden = true
         backButton.isHidden = true
+        loadingAnimation.isHidden = true
         searchMessage.isHidden = false
         originInputField.isHidden = false
         searchButton.isHidden = false
@@ -136,6 +145,12 @@ class ViewController: UIViewController {
             }
         }
         return false
+    }
+    
+    func startAnimation() {
+        loadingAnimation.animation = Animation.named("lf30_editor_R0bQvy")
+        loadingAnimation.loopMode = .loop
+        loadingAnimation.play()
     }
     
 }
