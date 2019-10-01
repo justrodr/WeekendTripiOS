@@ -45,6 +45,15 @@ class ViewModel : NSObject {
         return roundTrips[0]
     }
     
+    func stringIsAnAirportCode(input: String) -> Bool {
+        for destination in possibleDestinations {
+            if input == destination.key {
+                return true
+            }
+        }
+        return false
+    }
+    
     func getRawNearestDates() -> [Date] {
         let today = Date()
         let calendar = Calendar.current

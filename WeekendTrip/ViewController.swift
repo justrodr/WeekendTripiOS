@@ -105,11 +105,11 @@ class ViewController: UIViewController {
         errorMessageLabel.isHidden = true
         originInputField.resignFirstResponder()
         let textFieldInput = self.originInputField.text
-        let code = textFieldInput?.uppercased()
+        var code = textFieldInput?.uppercased()
+        code = code!.trimmingCharacters(in: .whitespaces)
         print("Searching for: " + code!)
         self.originInputField.text = code
-        if stringIsAnAirportCode(input: code ?? "") {
-//            self.searchMessage.text = "Searching for trips from " + code! + "..."
+        if viewModel.stringIsAnAirportCode(input: code ?? "") {
             self.searchMessage.text = ""
             self.originInputField.isHidden = true
             self.searchButton.isHidden = true
@@ -136,15 +136,6 @@ class ViewController: UIViewController {
         originInputField.isHidden = false
         searchButton.isHidden = false
         searchMessage.text = "Wanna travel this weekend? Lookup the cheapest trip from your city"
-    }
-    
-    private func stringIsAnAirportCode(input: String) -> Bool {
-        for destination in possibleDestinations {
-            if input == destination.key {
-                return true
-            }
-        }
-        return false
     }
     
     func startAnimation() {
@@ -186,10 +177,11 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("dang")
-        let url = URL(string: resultTrips[indexPath.row - 1].link)
-        let safariVC = SFSafariViewController(url: url!)
-        present(safariVC, animated: true)
+        if (indexPath.row > 0) {
+            let url = URL(string: resultTrips[indexPath.row - 1].link)
+            let safariVC = SFSafariViewController(url: url!)
+            present(safariVC, animated: true)
+        }
     }
     
 }
