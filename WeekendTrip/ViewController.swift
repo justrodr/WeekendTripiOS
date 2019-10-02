@@ -32,15 +32,17 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchButton.setTitle("\u{26B2}", for: .normal)
-        backButton.setTitle("\u{26B2}", for: .normal)
+        searchButton.setTitle("\u{2315}", for: .normal)
+        backButton.setTitle("\u{2315}", for: .normal)
         originInputField.layer.borderWidth = 5
         originInputField.layer.borderColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1).cgColor
         originInputField.layer.cornerRadius = 20
         resultsTableView.backgroundColor = UIColor.init(red: 175/255, green: 193/255, blue: 216/255, alpha: 1)
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
-        
+//        originInputField.placeholder = "JFK"
+        originInputField.attributedPlaceholder = NSAttributedString(string: "JFK",
+        attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(red: 120/255, green: 158/255, blue: 191/255, alpha: 1)])
         
         configureTapGesture()
         originInputField.delegate = self
@@ -135,7 +137,7 @@ class ViewController: UIViewController {
         searchMessage.isHidden = false
         originInputField.isHidden = false
         searchButton.isHidden = false
-        searchMessage.text = "Wanna travel this weekend? Lookup the cheapest trip from your city"
+        searchMessage.text = "Wanna travel this weekend? Lookup the cheapest trip from your home airport"
     }
     
     func startAnimation() {
@@ -182,6 +184,7 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate {
             let safariVC = SFSafariViewController(url: url!)
             present(safariVC, animated: true)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

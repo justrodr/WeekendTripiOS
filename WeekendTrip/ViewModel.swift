@@ -18,7 +18,9 @@ class ViewModel : NSObject {
         let sessionResultsArray = requestHandler.search(origin: origin, outboundDate: weekendDates[0], inboundDate: weekendDates[1])
         print("Finished polling")
         print(requestHandler.sessionResultsArray.count)
-        return getCheapestTrips(sessionResults: sessionResultsArray)
+        var cheapTripsArr = getCheapestTrips(sessionResults: sessionResultsArray)
+        cheapTripsArr.removeAll(where: { $0.destinationCode == "---" })
+        return cheapTripsArr
     }
     
     func getCheapestTrips(sessionResults: [ResultWithOriginAndDestination]) -> [RoundTrip] {
